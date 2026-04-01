@@ -19,7 +19,7 @@ Porter is Relay's CRM migration agent. It takes a raw Airtable contact export an
 
 **Contacts:** Every row in the input produces a contact row, except rows with no email (HubSpot requires email as a primary key).
 
-**Deals:** Only contacts with Status `In Progress`, `Closed Won`, or `Closed Lost` produce a deal row. `Cold`, `Nurturing`, and `Hot Lead` contacts are tracked as contacts only.
+**Deals:** Contacts with Status `In Progress`, `Closed Won`, or `Closed Lost` automatically produce a deal row.  `Nurturing` and `Hot Lead` contacts only generate HubSpot Deals if there is a dollar amount attached to their Airtable data. `Cold` contacts are tracked as contacts only always.
 
 ---
 
@@ -59,39 +59,6 @@ export ANTHROPIC_API_KEY=$(grep ANTHROPIC_API_KEY .env | cut -d '=' -f2)
 
 ---
 
-## Usage
-
-```bash
-python3 .claude/skills/migrate/transform.py your_airtable_export.csv
-```
-
-Optional: write output files to a specific directory
-
-```bash
-python3 .claude/skills/migrate/transform.py your_airtable_export.csv --output-dir ./output
-```
-
-Porter will print a live progress bar and an audit summary when complete:
-
-```
-Processing 60 rows from your_airtable_export.csv...
-
-====================================================
-  MIGRATION AUDIT SUMMARY
-====================================================
-  Rows processed        60
-  Phones reformatted    55
-  Dates missing         10
-  Emails flagged        0
-  Opt-outs detected     2
-  Skipped (no email)    1
-====================================================
-  → hubspot_contacts.csv  (59 contacts)
-  → hubspot_deals.csv  (47 deals)
-```
-
----
-
 ## Output files
 
 | File | Contents |
@@ -109,19 +76,9 @@ Processing 60 rows from your_airtable_export.csv...
 
 ---
 
-## Input format
-
-Porter expects a CSV export from Airtable with these columns:
-
-`Record ID`, `Full Name`, `Email`, `Phone`, `Company`, `Title`, `Status`, `Last Contact Date`, `Deal Value`, `Lead Source`, `Address`, `Tags`, `Notes`
-
-**Status values Porter recognizes:** `Cold`, `Nurturing`, `Hot Lead`, `In Progress`, `Closed Won`, `Closed Lost`
-
----
-
 ## Using Porter as a Claude Code skill
 
-If you use [Claude Code](https://claude.ai/code), Porter is packaged as an invocable skill. Once the repo is in your project's `.claude/skills/` directory, type `/migrate` in Claude Code to run the full migration with an audit report and anomaly review — no terminal required.
+Porter is packaged as an invocable Claude Code skill. Once the repo is in your project's `.claude/skills/` directory, type `/migrate` in Claude Code to run the full migration with an audit report and anomaly review.
 
 ---
 
