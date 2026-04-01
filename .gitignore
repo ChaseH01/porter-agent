@@ -1,0 +1,28 @@
+# Environment / secrets — never commit real keys
+.env
+.env.local
+
+# Generated output files — produced by running the migration
+hubspot_contacts.csv
+hubspot_deals.csv
+
+# Input data — contains real contact PII, keep off GitHub
+Airtable_relay_export.csv
+TEST.csv
+*.csv
+
+# Claude Code local settings (machine-specific permissions)
+.claude/settings.local.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# Unrelated skill artifacts
+csv-preview.skill
+csv-preview-extracted/
+preview_*.md
